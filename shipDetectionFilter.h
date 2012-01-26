@@ -13,8 +13,8 @@
 #include <opencv/highgui.h>
 
 // Include cvBlobs header files
-#include "blob.h"
-#include "BlobResult.h"
+#include <cvblobslib/blob.h>
+#include <cvblobslib/BlobResult.h>
 
 #include "kmlWriter.h"
 //#include "shpWriter.h"
