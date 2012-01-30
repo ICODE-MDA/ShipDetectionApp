@@ -4,7 +4,6 @@
 // 
 // See LICENSE.txt file in the top level directory for more details.
 //
-// Author:  Bryan Bagnall
 //
 //	Main function to call ossim filter which tiles image and runs something on it
 //
