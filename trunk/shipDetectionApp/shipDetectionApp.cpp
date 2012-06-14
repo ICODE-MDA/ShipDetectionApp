@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	// Declare ossim ImageHandler and open input image
 	ossimRefPtr<ossimImageHandler> ih = ossimImageHandlerRegistry::instance()->open(image_file);
 
-
+	
 	// Check to see if image handler is valid
 	if (ih.valid())
 	{
@@ -82,7 +82,7 @@ int main(int argc, char *argv[])
 
 		// Now print the geometry information for the file
 		cout << "Geometry: " << geom->print(cout) << endl;
-		/*
+		
 		//mask land
 		ossimRefPtr<ossimImageHandler> inputShp =
 			ossimImageHandlerRegistry::instance()->open(inputShpName);
@@ -104,9 +104,9 @@ int main(int argc, char *argv[])
 					inputShp->setProperty(fillProp);
 
 					//ossimRefPtr<ossimMaskFilter> maskFlt = new ossimMaskFilter();
-					maskFlt->setMaskType(ossimMaskFilter::OSSIM_MASK_TYPE_INVERT);
+					//maskFlt->setMaskType(ossimMaskFilter::OSSIM_MASK_TYPE_INVERT);
 					//if we wantd to mask out Water instead use the following
-					//maskFlt->setMaskType(ossimMaskFilter::OSSIM_MASK_TYPE_SELECT);
+					maskFlt->setMaskType(ossimMaskFilter::OSSIM_MASK_TYPE_SELECT);
 
 					maskFlt->connectMyInputTo(0, ih.get());
 					maskFlt->setMaskSource(inputShp.get());
@@ -114,13 +114,13 @@ int main(int argc, char *argv[])
 				}
 			}
 		}
-		*/
+	
 
 		//create ship detection filter
 		cout << "Connecting handler/mask to TileToIplFilter " << endl;
 		ossimRefPtr<shipDetectionFilter> shipDetection = new shipDetectionFilter();
 		shipDetection->setGeometry(ih.get());
-		shipDetection->connectMyInputTo(0,ih.get());
+		shipDetection->connectMyInputTo(0,maskFlt.get());
 		cout << "Connected!" << endl;
 		// Declare writer
 		ossimRefPtr<ossimImageSourceSequencer> sequencer = new ossimImageSourceSequencer();
@@ -134,6 +134,8 @@ int main(int argc, char *argv[])
 		cout << "Executing the chain..." << endl;
 		// Run through image tile by tile (execute filter chain.
 		while( (dataObject=sequencer->getNextTile()).valid() );
+
+		
 
 		shipDetection->disconnect();
 		sequencer->disconnect();
